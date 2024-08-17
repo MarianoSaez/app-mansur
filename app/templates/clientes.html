@@ -1,0 +1,40 @@
+{% extends "index.html" %}
+
+{% block content %}
+<table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Tipo de Identificación</th>
+        <th>Número de Identificación</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for cliente in clientes %}
+      <tr>
+        <td>
+          {% if cliente['tipo_persona'] == 'Natural' %}
+          <a href="{{ url_for('clientes.single_cliente', cliente_id=cliente['numero_identificacion']) }}">
+            {{ cliente['nombre'] }} {{ cliente['apellido'] }}
+          </a>
+          {% else %}
+          <a href="{{ url_for('clientes.single_cliente', cliente_id=cliente['numero_identificacion']) }}">
+            {{ cliente['nombre_empresa'] }}
+          </a>
+          {% endif %}
+        </td>
+        <td>{{ cliente['apellido'] if cliente['tipo_persona'] == 'Natural' else '-' }}</td>
+        <td>{{ cliente['tipo_identificacion'] }}</td>
+        <td>{{ cliente['numero_identificacion'] }}</td>
+        <td>
+          <!-- Botones para Editar y Eliminar -->
+          <button class="btn btn-primary">Editar</button>
+          <button class="btn btn-danger">Eliminar</button>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

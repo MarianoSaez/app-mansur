@@ -1,0 +1,42 @@
+{% extends "index.html" %}
+
+{% block content %}
+  <div class="container mt-5">
+    <h2>Información del Cliente</h2>
+    <dl class="row">
+      <dt class="col-sm-3">Tipo de Persona</dt>
+      <dd class="col-sm-9">{{ cliente['tipo_persona'] }}</dd>
+
+      <dt class="col-sm-3">Nombre</dt>
+      <dd class="col-sm-9">{{ cliente['nombre'] }}</dd>
+
+      <dt class="col-sm-3">Apellido</dt>
+      <dd class="col-sm-9">{{ cliente['apellido'] }}</dd>
+
+      <dt class="col-sm-3">Nombre de Empresa</dt>
+      <dd class="col-sm-9">{{ cliente['nombre_empresa'] }}</dd>
+
+      <dt class="col-sm-3">Tipo de Identificación</dt>
+      <dd class="col-sm-9">{{ cliente['tipo_identificacion'] }}</dd>
+
+      <dt class="col-sm-3">Número de Identificación</dt>
+      <dd class="col-sm-9">{{ cliente['numero_identificacion'] }}</dd>
+
+      <dt class="col-sm-3">País</dt>
+      <dd class="col-sm-9">{{ cliente['pais'] }}</dd>
+
+      <dt class="col-sm-3">Provincia</dt>
+      <dd class="col-sm-9">{{ cliente['provincia'] }}</dd>
+
+      <dt class="col-sm-3">Dirección</dt>
+      <dd class="col-sm-9">{{ cliente['direccion'] }}</dd>
+
+      <dt class="col-sm-3">Geolocalización</dt>
+      <dd class="col-sm-9">{{ cliente['geolocalizacion'] }}</dd>
+
+      <dt class="col-sm-3">Observaciones</dt>
+      <dd class="col-sm-9">{{ cliente['observaciones'] }}</dd>
+    </dl>
+    <a href="{{ url_for('clientes.clientes_content') }}" class="btn btn-secondary">Volver a la lista de clientes</a>
+  </div>
+{% endblock %}
