@@ -12,7 +12,7 @@ class TipoIdentificacion(Enum):
     OTRO = "OTRO"
 
 class Cliente:
-    def __init__(self, tipo_persona, nombre=None, apellido=None, nombre_empresa=None, tipo_identificacion=None, numero_identificacion=None, pais=None, provincia=None, direccion=None, geolocalizacion=None, observaciones=None):
+    def __init__(self, tipo_persona=None, nombre=None, apellido=None, nombre_empresa=None, tipo_identificacion=None, numero_identificacion=None, pais=None, provincia=None, direccion=None, geolocalizacion=None, observaciones=None):
         self.tipo_persona = TipoPersona(tipo_persona)
         self.nombre = nombre
         self.apellido = apellido
@@ -41,3 +41,19 @@ class Cliente:
         }
         # Eliminar claves con valores vacíos
         return {k: v for k, v in data if v is not None}
+    
+def parse_from_request(request):
+    data = [
+        'tipo_persona',
+        'nombre',
+        'apellido',
+        'nombre_empresa',
+        'tipo_identificacion',
+        'numero_identificacion',
+        'pais',
+        'provincia',
+        'direccion',
+        'geolocalizacion',
+        'observaciones',
+    ]
+    return { k : request.form.get(k) for k in data }

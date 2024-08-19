@@ -1,7 +1,164 @@
 {% extends "index.html" %}
 
 {% block content %}
-<table class="table table-striped">
+<div class="container mb-5">
+  <!-- Botón para abrir el modal de creación de cliente -->
+  <button class="btn btn-success" data-toggle="modal" data-target="#createClienteModal">Crear Cliente</button>
+
+  <!-- Modal para crear un cliente -->
+  <div class="modal fade" id="createClienteModal" tabindex="-1" role="dialog" aria-labelledby="createClienteModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <form id="createClienteForm" action="{{ url_for('clientes.crear_cliente') }}" method="POST">
+          <div class="modal-header">
+            <h5 class="modal-title" id="createClienteModalLabel">Crear Cliente</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="tipo_persona">Tipo de Persona</label>
+              <select id="tipo_persona" name="tipo_persona" class="form-control" required>
+                <option value="" disabled selected>Selecciona un tipo de persona</option>
+                <option value="Natural">Natural</option>
+                <option value="Juridica">Jurídica</option>
+              </select>
+            </div>
+            <div class="form-group" id="nombre-group" style="display: none;">
+              <label for="nombre">Nombre</label>
+              <input type="text" id="nombre" name="nombre" class="form-control" required>
+            </div>
+            <div class="form-group" id="apellido-group" style="display: none;">
+              <label for="apellido">Apellido</label>
+              <input type="text" id="apellido" name="apellido" class="form-control" required>
+            </div>
+            <div class="form-group" id="nombre_empresa-group" style="display: none;">
+              <label for="nombre_empresa">Nombre de Empresa</label>
+              <input type="text" id="nombre_empresa" name="nombre_empresa" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="tipo_identificacion">Tipo de Identificación</label>
+              <select id="tipo_identificacion" name="tipo_identificacion" class="form-control" required>
+                <option value="" disabled selected>Selecciona un tipo de identificación</option>
+                <option value="CUIT">CUIT</option>
+                <option value="CUIL">CUIL</option>
+                <option value="DNI">DNI</option>
+                <option value="PASAPORTE">Pasaporte</option>
+                <option value="OTRO">Otro</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="numero_identificacion">Número de Identificación</label>
+              <input type="text" id="numero_identificacion" name="numero_identificacion" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="pais">País</label>
+              <select id="pais" name="pais" class="form-control" required>
+                <option value="" disabled selected>Selecciona un país</option>
+                <!-- Agrega más opciones según necesidad -->
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="provincia">Provincia</label>
+              <select id="provincia" name="provincia" class="form-control" required>
+                <option value="" disabled selected>Selecciona una provincia</option>
+                <!-- Opciones dependientes del país -->
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="observaciones">Observaciones</label>
+              <textarea id="observaciones" name="observaciones" class="form-control" required></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            <button type="submit" class="btn btn-primary">Guardar Cliente</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para editar un cliente -->
+  <div class="modal fade" id="editClienteModal" tabindex="-1" role="dialog" aria-labelledby="editClienteModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <form id="editClienteForm" action="{{ url_for('clientes.editar_cliente') }}" method="POST">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editClienteModalLabel">Editar Cliente</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" id="edit_cliente_id" name="cliente_id">
+
+            <!-- Campos del formulario -->
+            <div class="form-group">
+              <label for="edit_tipo_persona">Tipo de Persona</label>
+              <select id="edit_tipo_persona" name="tipo_persona" class="form-control" required>
+                <option value="Natural">Natural</option>
+                <option value="Juridica">Jurídica</option>
+              </select>
+            </div>
+            <div class="form-group" id="edit_nombre_group">
+              <label for="edit_nombre">Nombre</label>
+              <input type="text" id="edit_nombre" name="nombre" class="form-control" required>
+            </div>
+            <div class="form-group" id="edit_apellido_group">
+              <label for="edit_apellido">Apellido</label>
+              <input type="text" id="edit_apellido" name="apellido" class="form-control" required>
+            </div>
+            <div class="form-group" id="edit_nombre_empresa_group" style="display: none;">
+              <label for="edit_nombre_empresa">Nombre de Empresa</label>
+              <input type="text" id="edit_nombre_empresa" name="nombre_empresa" class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="edit_tipo_identificacion">Tipo de Identificación</label>
+              <select id="edit_tipo_identificacion" name="tipo_identificacion" class="form-control" required>
+                <option value="CUIT">CUIT</option>
+                <option value="CUIL">CUIL</option>
+                <option value="DNI">DNI</option>
+                <option value="PASAPORTE">Pasaporte</option>
+                <option value="OTRO">Otro</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="edit_numero_identificacion">Número de Identificación</label>
+              <input type="text" id="edit_numero_identificacion" name="numero_identificacion" class="form-control"
+                required>
+            </div>
+            <div class="form-group">
+              <label for="edit_pais">País</label>
+              <select id="edit_pais" name="pais" class="form-control" required>
+                <!-- Aquí va la lista dinámica de países -->
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="edit_provincia">Provincia</label>
+              <select id="edit_provincia" name="provincia" class="form-control" required>
+                <!-- Aquí va la lista dinámica de provincias según el país -->
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="edit_observaciones">Observaciones</label>
+              <textarea id="edit_observaciones" name="observaciones" class="form-control" required></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabla de clientes -->
+  <table class="table table-striped">
     <thead>
       <tr>
         <th>Nombre</th>
@@ -16,11 +173,11 @@
       <tr>
         <td>
           {% if cliente['tipo_persona'] == 'Natural' %}
-          <a href="{{ url_for('clientes.single_cliente', cliente_id=cliente['numero_identificacion']) }}">
+          <a href="{{ url_for('clientes.single_cliente', cliente_id=cliente['key'].id) }}">
             {{ cliente['nombre'] }} {{ cliente['apellido'] }}
           </a>
           {% else %}
-          <a href="{{ url_for('clientes.single_cliente', cliente_id=cliente['numero_identificacion']) }}">
+          <a href="{{ url_for('clientes.single_cliente', cliente_id=cliente['key'].id) }}">
             {{ cliente['nombre_empresa'] }}
           </a>
           {% endif %}
@@ -30,11 +187,25 @@
         <td>{{ cliente['numero_identificacion'] }}</td>
         <td>
           <!-- Botones para Editar y Eliminar -->
-          <button class="btn btn-primary">Editar</button>
-          <button class="btn btn-danger">Eliminar</button>
+          <button class="btn btn-primary" onclick="openEditModal({{ cliente['key'].id }})">Editar</button>
+          <button class="btn btn-danger" onclick="eliminarCliente('{{ cliente['key'].id }}')">Eliminar</button>
         </td>
       </tr>
+
+      <!-- Modal de edición para cada cliente -->
+      <div class="modal fade" id="editClienteModal-{{ cliente['key'].id }}" tabindex="-1" role="dialog"
+        aria-labelledby="editClienteModalLabel-{{ cliente['key'].id }}" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <form id="editClienteForm-{{ cliente['key'].id }}"
+              action="{{ url_for('clientes.editar_cliente', cliente_id=cliente['key'].id) }}" method="POST">
+              <!-- Aquí irían los campos del formulario precargados con los datos del cliente -->
+            </form>
+          </div>
+        </div>
+      </div>
       {% endfor %}
     </tbody>
   </table>
+</div>
 {% endblock %}
