@@ -7,7 +7,7 @@ from flask import (
     jsonify
     )
 from google.cloud import datastore
-from ...models.cliente import parse_from_request, Cliente
+from ...models.cliente import parse_from_request, Cliente, serialize
 
 # Flask globals
 clientes_blueprint = Blueprint('clientes', __name__, url_prefix='/clientes')
@@ -43,30 +43,37 @@ def crear_cliente():
 @clientes_blueprint.route('/editar_cliente', methods=['POST'])
 def editar_cliente():
     cliente_id = request.form.get('cliente_id')
-    nombre = request.form.get('nombre')
-    apellido = request.form.get('apellido')
-    nombre_empresa = request.form.get('nombre_empresa')
     
     # Aquí realizarías la lógica para actualizar el cliente en la base de datos
     cliente_key = datastore_client.key('Cliente', int(cliente_id))
     cliente = datastore_client.get(cliente_key)
     
     if cliente:
-        cliente['nombre'] = nombre
-        cliente['apellido'] = apellido
-        cliente['nombre_empresa'] = nombre_empresa
-        # Actualizar otros campos según se necesite
-
+        data = serialize(parse_from_request(request))
+        print(data)
+        for k, v in data.items():
+            cliente[k] = v
+        print(cliente)
         datastore_client.put(cliente)
     
-    return redirect(url_for('clientes'))
+    return redirect(url_for('clientes.clientes_content'))
+
+@clientes_blueprint.route('/eliminar_cliente', methods=['POST'])
+def eliminar_cliente():
+    cliente_id = request.form.get('cliente_id')
+    print(request.form)
+    if cliente_id:
+        key = datastore_client.key('Cliente', int(cliente_id))
+        datastore_client.delete(key)
+        return redirect(url_for('clientes.clientes_content'))
+    return 'Cliente no encontrado', 404
 
 # REST
 @clientes_blueprint.route("/api/<cliente_id>")
 def get(cliente_id):
     cliente = get_cliente(int(cliente_id))
+    cliente["cliente_id"] = int(cliente_id)
     return jsonify(cliente)
-
 
 def get_lista_de_clientes():
     # Simulación de clientes. Aquí debes consultar tu base de datos real.

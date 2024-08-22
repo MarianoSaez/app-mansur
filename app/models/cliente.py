@@ -25,22 +25,22 @@ class Cliente:
         self.geolocalizacion = geolocalizacion  # Esperando un tuple (latitud, longitud)
         self.observaciones = observaciones
     
-    def serialize(self):
-        data = {
-            'tipo_persona': self.tipo_persona.value,
-            'nombre': self.nombre,
-            'apellido': self.apellido,
-            'nombre_empresa': self.nombre_empresa,
-            'tipo_identificacion': self.tipo_identificacion.value if self.tipo_identificacion else None,
-            'numero_identificacion': self.numero_identificacion,
-            'pais': self.pais,
-            'provincia': self.provincia,
-            'direccion': self.direccion,
-            'geolocalizacion': self.geolocalizacion,
-            'observaciones': self.observaciones
-        }
-        # Eliminar claves con valores vacíos
-        return {k: v for k, v in data if v is not None}
+def serialize(cliente):
+    data = {
+        'tipo_persona': cliente["tipo_persona"],
+        'nombre': cliente["nombre"],
+        'apellido': cliente["apellido"],
+        'nombre_empresa': cliente["nombre_empresa"],
+        'tipo_identificacion': cliente["tipo_identificacion"],
+        'numero_identificacion': cliente["numero_identificacion"],
+        'pais': cliente["pais"],
+        'provincia': cliente["provincia"],
+        'direccion': cliente["direccion"],
+        'geolocalizacion': cliente["geolocalizacion"],
+        'observaciones': cliente["observaciones"],
+    }
+    # Eliminar claves con valores vacíos
+    return {k: v for k, v in data.items() if v is not None}
     
 def parse_from_request(request):
     data = [

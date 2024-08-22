@@ -106,11 +106,11 @@
             </div>
             <div class="form-group" id="edit_nombre_group">
               <label for="edit_nombre">Nombre</label>
-              <input type="text" id="edit_nombre" name="nombre" class="form-control" required>
+              <input type="text" id="edit_nombre" name="nombre" class="form-control">
             </div>
             <div class="form-group" id="edit_apellido_group">
               <label for="edit_apellido">Apellido</label>
-              <input type="text" id="edit_apellido" name="apellido" class="form-control" required>
+              <input type="text" id="edit_apellido" name="apellido" class="form-control">
             </div>
             <div class="form-group" id="edit_nombre_empresa_group" style="display: none;">
               <label for="edit_nombre_empresa">Nombre de Empresa</label>
@@ -187,23 +187,10 @@
         <td>{{ cliente['numero_identificacion'] }}</td>
         <td>
           <!-- Botones para Editar y Eliminar -->
-          <button class="btn btn-primary" onclick="openEditModal({{ cliente['key'].id }})">Editar</button>
-          <button class="btn btn-danger" onclick="eliminarCliente('{{ cliente['key'].id }}')">Eliminar</button>
+          <button class="btn btn-primary" onclick="openEditModal('{{ cliente['id'] }}')">Editar</button>
+          <button class="btn btn-danger" onclick="eliminarCliente('{{ cliente['id'] }}')">Eliminar</button>
         </td>
       </tr>
-
-      <!-- Modal de edición para cada cliente -->
-      <div class="modal fade" id="editClienteModal-{{ cliente['key'].id }}" tabindex="-1" role="dialog"
-        aria-labelledby="editClienteModalLabel-{{ cliente['key'].id }}" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <form id="editClienteForm-{{ cliente['key'].id }}"
-              action="{{ url_for('clientes.editar_cliente', cliente_id=cliente['key'].id) }}" method="POST">
-              <!-- Aquí irían los campos del formulario precargados con los datos del cliente -->
-            </form>
-          </div>
-        </div>
-      </div>
       {% endfor %}
     </tbody>
   </table>

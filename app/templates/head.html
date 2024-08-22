@@ -1,16 +1,17 @@
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laboratorio</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <script type="module" src="{{ url_for('static', filename='auth.js') }}" defer></script>
-    <script type="module" src="{{ url_for('static', filename='clientes.js') }}" defer></script>
-    <script type="module" src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js"></script>
-    <script type="module" src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js"></script>
-    <script type="module">
-      import { openEditModal } from "{{ url_for('static', filename='clientes.js') }}";
-      window.openEditModal = openEditModal; // Hacer que la función sea accesible globalmente
-    </script>
-    <!-- Bootstrap -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-  </head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Laboratorio</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script type="module" src="{{ url_for('static', filename='auth.js') }}" defer></script>
+  <script type="module" src="{{ url_for('static', filename='clientes.js') }}" defer></script>
+  <script type="module" src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js"></script>
+  <script type="module" src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js"></script>
+  <script type="module">
+    import { openEditModal, eliminarCliente } from "{{ url_for('static', filename='clientes.js') }}";
+    window.openEditModal = openEditModal; // Hacer que la función sea accesible globalmente
+    window.eliminarCliente = eliminarCliente; // Hacer que la función sea accesible globalmente
+  </script>
+  <!-- Bootstrap -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>

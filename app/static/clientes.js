@@ -130,40 +130,74 @@ document.getElementById('tipo_persona').addEventListener('change', function () {
 })
 
 export const openEditModal = (clienteId) => {
-// Hacer una solicitud AJAX al backend para obtener los datos del cliente
-fetch(`/clientes/api/${clienteId}`)
-.then(response => response.json())
-.then(cliente => {
-  // Precargar los datos en el formulario de edición
-  document.getElementById('edit_cliente_id').value = cliente.numero_identificacion;
-  document.getElementById('edit_tipo_persona').value = cliente.tipo_persona;
-  document.getElementById('edit_nombre').value = cliente.nombre;
-  document.getElementById('edit_apellido').value = cliente.apellido;
-  document.getElementById('edit_nombre_empresa').value = cliente.nombre_empresa;
-  document.getElementById('edit_tipo_identificacion').value = cliente.tipo_identificacion;
-  document.getElementById('edit_numero_identificacion').value = cliente.numero_identificacion;
-  document.getElementById('edit_pais').value = cliente.pais;
-  document.getElementById('edit_provincia').value = cliente.provincia;
-  document.getElementById('edit_observaciones').value = cliente.observaciones;
+    // Hacer una solicitud AJAX al backend para obtener los datos del cliente
+    fetch(`/clientes/api/${clienteId}`)
+        .then(response => response.json())
+        .then(cliente => {
+            // Precargar los datos en el formulario de edición
+            console.log(cliente);
+            document.getElementById('edit_cliente_id').value = cliente.cliente_id;
+            document.getElementById('edit_tipo_persona').value = cliente.tipo_persona;
+            document.getElementById('edit_nombre').value = cliente.nombre;
+            document.getElementById('edit_apellido').value = cliente.apellido;
+            document.getElementById('edit_nombre_empresa').value = cliente.nombre_empresa;
+            document.getElementById('edit_tipo_identificacion').value = cliente.tipo_identificacion;
+            document.getElementById('edit_numero_identificacion').value = cliente.numero_identificacion;
+            document.getElementById('edit_observaciones').value = cliente.observaciones;
 
-  // Mostrar el modal de edición
-  $('#editClienteModal').modal('show');
+            const pais = cliente.pais
+            const provinciaSelect = document.getElementById('edit_provincia');
+            provincias[pais].forEach(provincia => {
+                const option = document.createElement('option');
+                option.value = provincia;
+                option.textContent = provincia;
+                provinciaSelect.appendChild(option);
+            })
+            document.getElementById('edit_pais').value = pais;
+            provinciaSelect.value = cliente.provincia;
 
-  // Lógica para mostrar u ocultar los campos según el tipo de persona
-  if (cliente.tipo_persona === 'Natural') {
-    document.getElementById('edit_nombre_group').style.display = 'block';
-    document.getElementById('edit_apellido_group').style.display = 'block';
-    document.getElementById('edit_nombre_empresa_group').style.display = 'none';
-  } else {
-    document.getElementById('edit_nombre_group').style.display = 'none';
-    document.getElementById('edit_apellido_group').style.display = 'none';
-    document.getElementById('edit_nombre_empresa_group').style.display = 'block';
-  }
-})
-.catch(error => {
-  console.error('Error al obtener los datos del cliente:', error);
-  alert('No se pudo cargar la información del cliente.');
-});
-  }
+            // Mostrar el modal de edición
+            $('#editClienteModal').modal('show');
+
+            // Lógica para mostrar u ocultar los campos según el tipo de persona
+            if (cliente.tipo_persona === 'Natural') {
+                document.getElementById('edit_nombre_group').style.display = 'block';
+                document.getElementById('edit_apellido_group').style.display = 'block';
+                document.getElementById('edit_nombre_empresa_group').style.display = 'none';
+            } else {
+                document.getElementById('edit_nombre_group').style.display = 'none';
+                document.getElementById('edit_apellido_group').style.display = 'none';
+                document.getElementById('edit_nombre_empresa_group').style.display = 'block';
+            }
+        })
+        .catch(error => {
+            console.error('Error al obtener los datos del cliente:', error);
+            alert('No se pudo cargar la información del cliente.');
+        });
+}
+
+export const eliminarCliente = (clienteId) => {
+    if (confirm('¿Estás seguro de que deseas eliminar este cliente?')) {
+        fetch('/clientes/eliminar_cliente', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams({
+                'cliente_id': clienteId
+            })
+        }).then(response => {
+            if (response.ok) {
+                // Refrescar la página o quitar el cliente de la lista
+                window.location.reload();
+            } else {
+                alert('Error al eliminar el cliente.');
+            }
+        }).catch(error => {
+            console.error('Error:', error);
+            alert('Error al eliminar el cliente.');
+        });
+    }
+}
 
 
